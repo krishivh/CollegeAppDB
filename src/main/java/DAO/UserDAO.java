@@ -13,7 +13,7 @@ public class UserDAO {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         try (Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/new_schema?useSSL=false&serverTimezone=UTC", "root", "MyS3cure#2024");
+                "jdbc:mysql://localhost:3306/new_schema?useSSL=false&serverTimezone=UTC", "root", "");
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
 
             preparedStatement.setString(1, user.getFirstName());
@@ -41,7 +41,7 @@ public class UserDAO {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         try (Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/new_schema?useSSL=false&serverTimezone=UTC", "root", "MyS3cure#2024");
+                "jdbc:mysql://localhost:3306/new_schema?useSSL=false&serverTimezone=UTC", "root", "");
              PreparedStatement preparedStatement = connection.prepareStatement(LOGIN_USER_SQL)) {
 
             preparedStatement.setString(1, email);
