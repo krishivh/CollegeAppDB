@@ -25,8 +25,6 @@
 </head>
 <body>
 <a href="dashboard.jsp" style="text-decoration: none; font-size: 16px;">&#8592; Back</a>
-<br><br>
-
 <h1>Manage Colleges</h1>
 
 <%
@@ -49,13 +47,11 @@
           int yearFounded = Integer.parseInt(request.getParameter("yearFounded"));
           float averageGPA = Float.parseFloat(request.getParameter("averageGPA"));
           collegeDAO.addCollege(name, location, yearFounded, averageGPA, userID);
-          System.out.println("College added successfully!");
           break;
 
         case "delete":
           int deleteCollegeID = Integer.parseInt(request.getParameter("collegeID"));
           collegeDAO.deleteCollege(deleteCollegeID, userID);
-          System.out.println("College deleted successfully!");
           break;
 
         case "update":
@@ -65,12 +61,11 @@
           int updatedYearFounded = Integer.parseInt(request.getParameter("yearFounded"));
           float updatedAverageGPA = Float.parseFloat(request.getParameter("averageGPA"));
           collegeDAO.updateCollege(collegeID, updatedName, updatedLocation, updatedYearFounded, updatedAverageGPA, userID);
-          System.out.println("College updated successfully!");
           break;
 
         case "search":
           String keyword = request.getParameter("searchKeyword");
-          request.setAttribute("searchResults", collegeDAO.searchCollegesByName(keyword));
+          request.setAttribute("searchResults", collegeDAO.searchCollegesByName(keyword, userID));
           break;
       }
     } catch (Exception e) {

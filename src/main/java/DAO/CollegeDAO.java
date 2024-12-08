@@ -7,11 +7,11 @@ import java.util.List;
 
 public class CollegeDAO {
 
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/new_schema?useSSL=false&serverTimezone=UTC";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/new_schema";
     private static final String JDBC_USERNAME = "root";
-    private static final String JDBC_PASSWORD = "";
+    private static final String JDBC_PASSWORD = "MyS3cure#2024";
 
-    // Add a new college for a specific user
+    // Add a new college
     public void addCollege(String name, String location, int yearFounded, float averageGPA, int userID) {
         String sql = "INSERT INTO Colleges (name, location, yearFounded, averageGPA, userID) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
@@ -22,16 +22,15 @@ public class CollegeDAO {
             statement.setFloat(4, averageGPA);
             statement.setInt(5, userID);
             statement.executeUpdate();
-            System.out.println("College added successfully!");
         } catch (SQLException e) {
-            printSQLException(e);
+            e.printStackTrace();
         }
     }
 
     // Get all colleges for a specific user
     public List<Colleges> getCollegesByUserID(int userID) {
+        List<Colleges> collegesList = new ArrayList<>();
         String sql = "SELECT * FROM Colleges WHERE userID = ?";
-        List<Colleges> collegeList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userID);
@@ -44,36 +43,12 @@ public class CollegeDAO {
                         resultSet.getInt("yearFounded"),
                         resultSet.getFloat("averageGPA")
                 );
-                collegeList.add(college);
+                collegesList.add(college);
             }
         } catch (SQLException e) {
-            printSQLException(e);
+            e.printStackTrace();
         }
-        return collegeList;
-    }
-
-    // Search colleges by name
-    public List<Colleges> searchCollegesByName(String keyword) {
-        String sql = "SELECT * FROM Colleges WHERE name LIKE ?";
-        List<Colleges> collegeList = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, "%" + keyword + "%");
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Colleges college = new Colleges(
-                        resultSet.getInt("collegeID"),
-                        resultSet.getString("name"),
-                        resultSet.getString("location"),
-                        resultSet.getInt("yearFounded"),
-                        resultSet.getFloat("averageGPA")
-                );
-                collegeList.add(college);
-            }
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-        return collegeList;
+        return collegesList;
     }
 
     // Delete a college
@@ -83,14 +58,9 @@ public class CollegeDAO {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, collegeID);
             statement.setInt(2, userID);
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("College deleted successfully!");
-            } else {
-                System.out.println("No college found with ID: " + collegeID + " for this user.");
-            }
+            statement.executeUpdate();
         } catch (SQLException e) {
-            printSQLException(e);
+            e.printStackTrace();
         }
     }
 
@@ -105,30 +75,34 @@ public class CollegeDAO {
             statement.setFloat(4, averageGPA);
             statement.setInt(5, collegeID);
             statement.setInt(6, userID);
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("College updated successfully!");
-            } else {
-                System.out.println("No college found with ID: " + collegeID + " for this user.");
-            }
+            statement.executeUpdate();
         } catch (SQLException e) {
-            printSQLException(e);
+            e.printStackTrace();
         }
     }
 
-    private void printSQLException(SQLException ex) {
-        for (Throwable e : ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
+    // Search colleges by name for a specific user
+    public List<Colleges> searchCollegesByName(String name, int userID) {
+        List<Colleges> collegesList = new ArrayList<>();
+        String sql = "SELECT * FROM Colleges WHERE name LIKE ? AND userID = ?";
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + name + "%");
+            statement.setInt(2, userID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Colleges college = new Colleges(
+                        resultSet.getInt("collegeID"),
+                        resultSet.getString("name"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("yearFounded"),
+                        resultSet.getFloat("averageGPA")
+                );
+                collegesList.add(college);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return collegesList;
     }
 }
