@@ -1,4 +1,4 @@
-package collegeapp;
+package DAO;
 
 public class ApplicationDAO {
 }
