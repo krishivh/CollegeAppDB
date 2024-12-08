@@ -10,7 +10,7 @@ public class CollegeDAO {
     // Database connection details
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/new_schema?useSSL=false&serverTimezone=UTC";
     private static final String JDBC_USERNAME = "root";
-    private static final String JDBC_PASSWORD = "MyS3cure#2024";
+    private static final String JDBC_PASSWORD = "";
 
     // Add a new college for a specific user
     public void addCollege(String name, String location, int yearFounded, float averageGPA, int userID) {
