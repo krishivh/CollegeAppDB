@@ -16,6 +16,10 @@ public class Colleges {
         this.averageGPA = averageGPA;
     }
 
+    public Colleges() {
+
+    }
+
     // Getters and Setters
     public int getCollegeID() {
         return collegeID;
