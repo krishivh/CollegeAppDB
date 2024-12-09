@@ -32,12 +32,22 @@ public class RegisterServlet extends HttpServlet {
             logger.info("Entering doPost method.");
             User user = new User();
 
-            // Remove userID assignment as it is auto-incremented by the database
-            // Assume passwords are stored
+            // Get and validate the password
+            String password = request.getParameter("password");
+
+            if (!isValidPassword(password)) {
+                logger.warning("Password validation failed.");
+                request.setAttribute("errorMessage", "Password must be at least 7 characters long, contain one uppercase letter, one number, and one special character.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/register.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            // Populate the user object
             user.setFirstName(request.getParameter("firstName"));
             user.setLastName(request.getParameter("lastName"));
             user.setEmail(request.getParameter("email"));
-            user.setPassword(request.getParameter("password")); // Assuming you have a field for this
+            user.setPassword(password);
             user.setPhone(request.getParameter("phone"));
             user.setHighSchool(request.getParameter("highSchool"));
             user.setGPA(Float.parseFloat(request.getParameter("gpa")));
@@ -50,7 +60,9 @@ public class RegisterServlet extends HttpServlet {
                 response.sendRedirect("login.jsp");
             } else {
                 logger.warning("Failed to register user.");
-                response.sendRedirect("register.jsp");
+                request.setAttribute("errorMessage", "Failed to register user. Please try again.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/register.jsp");
+                dispatcher.forward(request, response);
             }
         } catch (NumberFormatException e) {
             logger.log(Level.SEVERE, "Failed to parse a number", e);
@@ -62,5 +74,16 @@ public class RegisterServlet extends HttpServlet {
             logger.log(Level.SEVERE, "Unexpected Error", e);
             response.sendRedirect("error.jsp");
         }
+    }
+
+    /**
+     * Validates the password to ensure it meets the required criteria.
+     * @param password The password to validate.
+     * @return true if the password is valid, false otherwise.
+     */
+    private boolean isValidPassword(String password) {
+        // Regular expression to enforce password rules
+        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{7,}$";
+        return password != null && password.matches(passwordPattern);
     }
 }

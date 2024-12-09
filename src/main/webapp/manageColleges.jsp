@@ -4,27 +4,106 @@
 <html>
 <head>
   <title>Manage Colleges</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <style>
-    h1 {
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    a {
+      text-decoration: none;
+      font-size: 1em;
+      margin-top: 20px;
+      color: #007bff;
+    }
+
+    a:hover {
+      color: #0056b3;
+    }
+
+    h1, h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 90%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
       text-align: center;
     }
-    table {
-      width: 80%;
-      margin-top: 20px;
-      border-collapse: collapse;
+
+    th {
+      background-color: #007bff;
+      color: white;
     }
-    th, td {
-      border: 1px solid black;
-      padding: 10px;
-      text-align: left;
+
+    td {
+      background-color: #f9f9f9;
     }
+
+    td input, td button {
+      margin: 5px 0;
+    }
+
     form {
+      width: 100%;
+      max-width: 500px;
       margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 500;
+      color: #555;
+    }
+
+    input[type="text"], input[type="number"], input[type="hidden"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button.delete {
+      background-color: red;
+    }
+
+    button.delete:hover {
+      background-color: darkred;
     }
   </style>
 </head>
 <body>
-<a href="dashboard.jsp" style="text-decoration: none; font-size: 16px;">&#8592; Back</a>
+<a href="dashboard.jsp"><i class="fas fa-arrow-left"></i> Back</a>
 <h1>Manage Colleges</h1>
 
 <%
@@ -78,22 +157,22 @@
 
 <h2>Add a New College</h2>
 <form method="post" action="manageColleges.jsp">
-  <label for="name">College Name:</label><br>
-  <input type="text" id="name" name="name" required><br><br>
-  <label for="location">Location:</label><br>
-  <input type="text" id="location" name="location" required><br><br>
-  <label for="yearFounded">Year Founded:</label><br>
-  <input type="number" id="yearFounded" name="yearFounded" min="0" required><br><br>
-  <label for="averageGPA">Average GPA:</label><br>
-  <input type="number" step="0.01" id="averageGPA" name="averageGPA" required><br><br>
-  <button type="submit" name="action" value="add">Add College</button>
+  <label for="name">College Name:</label>
+  <input type="text" id="name" name="name" required>
+  <label for="location">Location:</label>
+  <input type="text" id="location" name="location" required>
+  <label for="yearFounded">Year Founded:</label>
+  <input type="number" id="yearFounded" name="yearFounded" min="0" required>
+  <label for="averageGPA">Average GPA:</label>
+  <input type="number" step="0.01" id="averageGPA" name="averageGPA" required>
+  <button type="submit" name="action" value="add"><i class="fas fa-plus"></i> Add College</button>
 </form>
 
 <h2>Search Colleges</h2>
 <form method="post" action="manageColleges.jsp">
-  <label for="searchKeyword">Search by College Name:</label><br>
-  <input type="text" id="searchKeyword" name="searchKeyword" required><br><br>
-  <button type="submit" name="action" value="search">Search</button>
+  <label for="searchKeyword">Search by College Name:</label>
+  <input type="text" id="searchKeyword" name="searchKeyword" required>
+  <button type="submit" name="action" value="search"><i class="fas fa-search"></i> Search</button>
 </form>
 
 <%
@@ -142,13 +221,13 @@
         <input type="text" name="location" value="<%= college.getLocation() %>" required>
         <input type="number" name="yearFounded" value="<%= college.getYearFounded() %>" required>
         <input type="number" step="0.01" name="averageGPA" value="<%= college.getAverageGPA() %>" required>
-        <button type="submit" name="action" value="update">Save</button>
+        <button type="submit" name="action" value="update"><i class="fas fa-save"></i> Save</button>
       </form>
     </td>
     <td>
       <form method="post" action="manageColleges.jsp" style="display: inline;">
         <input type="hidden" name="collegeID" value="<%= college.getCollegeID() %>">
-        <button type="submit" name="action" value="delete" style="background-color: red; color: white;">Delete</button>
+        <button type="submit" name="action" value="delete" class="delete"><i class="fas fa-trash"></i> Delete</button>
       </form>
     </td>
   </tr>

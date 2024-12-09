@@ -1,128 +1,235 @@
 <%@ page import="DAO.ApplicationDAO" %>
-<%@ page import="model.Colleges" %>
+<%@ page import="DAO.CollegeDAO" %>
 <%@ page import="model.Applications" %>
+<%@ page import="model.Colleges" %>
 <%@ page import="java.util.List" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="DAO.CollegeDAO" %>
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Manage Applications</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
-        table {
-            width: 80%;
-            border-collapse: collapse;
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        a {
+            text-decoration: none;
+            font-size: 1em;
             margin-top: 20px;
+            color: #007bff;
         }
-        table, th, td {
-            border: 1px solid black;
+
+        a:hover {
+            color: #0056b3;
         }
-        th, td {
-            padding: 10px;
-            text-align: left;
+
+        h1, h2 {
+            color: #333;
+            margin-bottom: 10px;
         }
+
         form {
+            width: 100%;
+            max-width: 500px;
             margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        td button {
+            margin: 0;
+        }
+
+        .delete {
+            background-color: red;
+        }
+
+        .delete:hover {
+            background-color: darkred;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            width: 90%;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
 <body>
-<a href="dashboard.jsp" style="text-decoration: none; font-size: 16px;">&#8592; Back</a>
+<a href="dashboard.jsp"><i class="fas fa-arrow-left"></i> Back</a>
 <h1>Manage Applications</h1>
 
 <%
-    // Ensure the user is logged in
-    HttpSession existingSession = request.getSession(false);
-    if (existingSession == null || existingSession.getAttribute("userID") == null) {
+    // Session and DAO Initialization
+    HttpSession session1 = request.getSession(false);
+    if (session == null || session1.getAttribute("userID") == null) {
         response.sendRedirect("login.jsp");
-        return; // Stop further processing
+        return;
     }
 
-    int userID = (Integer) existingSession.getAttribute("userID");
-
-    // Initialize DAO for fetching colleges and managing applications
+    int userID = (Integer) session.getAttribute("userID");
     ApplicationDAO applicationDAO = new ApplicationDAO();
     CollegeDAO collegeDAO = new CollegeDAO();
 
-    // Fetch the list of colleges for this user
+    // Fetch colleges and applications
     List<Colleges> collegesList = collegeDAO.getCollegesByUserID(userID);
+    List<Applications> applicationsList = applicationDAO.getApplicationsByUserID(userID);
 
-    // Process form actions (Add, Edit, Delete)
+    // Handle actions
+    String message = null;
+    String messageType = "success"; // "success" or "error"
     String action = request.getParameter("action");
-    if (action != null) {
-        try {
-            switch (action) {
-                case "add": // Add a new application
-                    String collegeID = request.getParameter("collegeID");
-                    String submissionStatus = request.getParameter("submissionStatus");
-                    String applicationDeadline = request.getParameter("applicationDeadline");
-                    String applicationType = request.getParameter("applicationType");
 
-                    // Add application
-                    applicationDAO.addApplication(Integer.parseInt(collegeID), submissionStatus, applicationDeadline, applicationType, userID);
-                    out.println("<p style='color: green;'>Application added successfully!</p>");
-                    break;
+    try {
+        if (action != null) {
+            switch (action) {
+                case "add":
+                    applicationDAO.addApplication(
+                            request.getParameter("collegeName"),
+                            request.getParameter("submissionStatus"),
+                            request.getParameter("applicationDeadline"),
+                            request.getParameter("applicationType"),
+                            userID
+                    );
+                    response.sendRedirect("manageApplications.jsp?message=Application added successfully!");
+                    return; // Stop further processing
 
                 case "delete": // Delete an application
                     int applicationID = Integer.parseInt(request.getParameter("applicationID"));
                     applicationDAO.deleteApplication(applicationID, userID);
-                    out.println("<p style='color: green;'>Application deleted successfully!</p>");
-                    break;
+                    response.sendRedirect("manageApplications.jsp?message=Application deleted successfully!");
+                    return; // Stop further processing
 
-                case "update": // Edit an application
-                    // Fetch updated values for application
-                    int appID = Integer.parseInt(request.getParameter("applicationID"));
-                    String updatedSubmissionStatus = request.getParameter("submissionStatus");
-                    String updatedApplicationDeadline = request.getParameter("applicationDeadline");
-                    String updatedApplicationType = request.getParameter("applicationType");
+                case "update":
+                    applicationDAO.updateApplication(
+                            Integer.parseInt(request.getParameter("applicationID")),
+                            request.getParameter("collegeName"),
+                            request.getParameter("submissionStatus"),
+                            request.getParameter("applicationDeadline"),
+                            request.getParameter("applicationType"),
+                            userID
+                    );
+                    response.sendRedirect("manageApplications.jsp?message=Application updated successfully!");
+                    return; // Stop further processing
 
-                    applicationDAO.updateApplication(appID, updatedSubmissionStatus, updatedApplicationDeadline, updatedApplicationType, userID);
-                    out.println("<p style='color: green;'>Application updated successfully!</p>");
+                default:
+                    message = "Unknown action!";
+                    messageType = "error";
                     break;
             }
-        } catch (Exception e) {
-            out.println("<p style='color: red;'>Error: " + e.getMessage() + "</p>");
         }
+    } catch (Exception e) {
+        message = "Error: " + e.getMessage();
+        messageType = "error";
     }
-
-    // Fetch the list of applications for the logged-in user
-    List<Applications> applications = applicationDAO.getApplicationsByUserID(userID);
 %>
 
-<!-- Form to Add a New Application -->
+<% if (message != null) { %>
+<div class="message <%= messageType %>"><%= message %></div>
+<% } %>
+
 <h2>Add a New Application</h2>
 <form method="post" action="manageApplications.jsp">
-    <label for="collegeID">College:</label><br>
-    <select name="collegeID" id="collegeID" required>
+    <label for="collegeName">College:</label>
+    <select name="collegeName" id="collegeName" required>
         <% for (Colleges college : collegesList) { %>
-        <option value="<%= college.getCollegeID() %>"><%= college.getName() %></option>
+        <option value="<%= college.getName() %>"><%= college.getName() %></option>
         <% } %>
-    </select><br><br>
+    </select>
 
-    <label for="submissionStatus">Submission Status:</label><br>
-    <!-- Submission Status Dropdown -->
-    <select name="submissionStatus" required>
+    <label for="submissionStatus">Submission Status:</label>
+    <select name="submissionStatus" id="submissionStatus" required>
         <option value="Done">Done</option>
         <option value="Not Complete">Not Complete</option>
         <option value="In Progress">In Progress</option>
-    </select><br><br>
+    </select>
 
-    <label for="applicationDeadline">Application Deadline:</label><br>
-    <input type="date" id="applicationDeadline" name="applicationDeadline" required><br><br>
+    <label for="applicationDeadline">Application Deadline:</label>
+    <input type="date" id="applicationDeadline" name="applicationDeadline" required>
 
-    <label for="applicationType">Application Type:</label><br>
-    <!-- Application Type Dropdown -->
-    <select name="applicationType" required>
+    <label for="applicationType">Application Type:</label>
+    <select name="applicationType" id="applicationType" required>
         <option value="Early Decision">Early Decision</option>
         <option value="Regular Decision">Regular Decision</option>
-    </select><br><br>
+    </select>
 
-    <button type="submit" name="action" value="add">Add Application</button>
+    <button type="submit" name="action" value="add"><i class="fas fa-plus"></i> Add Application</button>
 </form>
 
-<!-- Display List of Applications -->
 <h2>Your Applications</h2>
 <table>
     <tr>
@@ -133,45 +240,49 @@
         <th>Edit</th>
         <th>Delete</th>
     </tr>
-    <% for (Applications application1 : applications) { %>
+    <% if (applicationsList != null && !applicationsList.isEmpty()) { %>
+    <% for (Applications app : applicationsList) { %>
     <tr>
-        <td><%= application1.getCollegeName() %></td>
-        <td><%= application1.getSubmissionStatus() %></td>
-        <td><%= application1.getApplicationDeadline() %></td>
-        <td><%= application1.getApplicationType() %></td>
+        <td><%= app.getCollegeName() %></td>
+        <td><%= app.getSubmissionStatus() %></td>
+        <td><%= app.getApplicationDeadline() %></td>
+        <td><%= app.getApplicationType() %></td>
         <td>
-            <!-- Edit Form -->
             <form method="post" action="manageApplications.jsp" style="display: inline;">
-                <input type="hidden" name="applicationID" value="<%= application1.getApplicationID() %>">
-
-                <!-- Submission Status Dropdown for Edit -->
+                <input type="hidden" name="applicationID" value="<%= app.getApplicationID() %>">
+                <select name="collegeName" required>
+                    <% for (Colleges college : collegesList) { %>
+                    <option value="<%= college.getName() %>" <%= college.getName().equals(app.getCollegeName()) ? "selected" : "" %>>
+                        <%= college.getName() %>
+                    </option>
+                    <% } %>
+                </select>
                 <select name="submissionStatus" required>
-                    <option value="Done" <%= "Done".equals(application1.getSubmissionStatus()) ? "selected" : "" %>>Done</option>
-                    <option value="Not Complete" <%= "Not Complete".equals(application1.getSubmissionStatus()) ? "selected" : "" %>>Not Complete</option>
-                    <option value="In Progress" <%= "In Progress".equals(application1.getSubmissionStatus()) ? "selected" : "" %>>In Progress</option>
-                </select><br><br>
-
-                <input type="date" name="applicationDeadline" value="<%= application1.getApplicationDeadline() %>" required>
-
-                <!-- Application Type Dropdown for Edit -->
+                    <option value="Done" <%= "Done".equals(app.getSubmissionStatus()) ? "selected" : "" %>>Done</option>
+                    <option value="Not Complete" <%= "Not Complete".equals(app.getSubmissionStatus()) ? "selected" : "" %>>Not Complete</option>
+                    <option value="In Progress" <%= "In Progress".equals(app.getSubmissionStatus()) ? "selected" : "" %>>In Progress</option>
+                </select>
+                <input type="date" name="applicationDeadline" value="<%= app.getApplicationDeadline() %>" required>
                 <select name="applicationType" required>
-                    <option value="Early Decision" <%= "Early Decision".equals(application1.getApplicationType()) ? "selected" : "" %>>Early Decision</option>
-                    <option value="Regular Decision" <%= "Regular Decision".equals(application1.getApplicationType()) ? "selected" : "" %>>Regular Decision</option>
-                </select><br><br>
-
-                <button type="submit" name="action" value="update">Save</button>
+                    <option value="Early Decision" <%= "Early Decision".equals(app.getApplicationType()) ? "selected" : "" %>>Early Decision</option>
+                    <option value="Regular Decision" <%= "Regular Decision".equals(app.getApplicationType()) ? "selected" : "" %>>Regular Decision</option>
+                </select>
+                <button type="submit" name="action" value="update"><i class="fas fa-save"></i> Save</button>
             </form>
         </td>
         <td>
-            <!-- Delete Form -->
             <form method="post" action="manageApplications.jsp" style="display: inline;">
-                <input type="hidden" name="applicationID" value="<%= application1.getApplicationID() %>">
-                <button type="submit" name="action" value="delete" style="background-color: red; color: white;">Delete</button>
+                <input type="hidden" name="applicationID" value="<%= app.getApplicationID() %>">
+                <button type="submit" name="action" value="delete" class="delete"><i class="fas fa-trash"></i> Delete</button>
             </form>
         </td>
     </tr>
     <% } %>
+    <% } else { %>
+    <tr>
+        <td colspan="6">No applications found.</td>
+    </tr>
+    <% } %>
 </table>
-
 </body>
 </html>
