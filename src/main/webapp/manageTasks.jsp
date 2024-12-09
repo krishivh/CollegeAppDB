@@ -6,6 +6,7 @@
 
 <html>
 <head>
+  <!-- linking Google Fonts for consistent typography -->
   <title>Manage Tasks</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -19,7 +20,7 @@
       flex-direction: column;
       align-items: center;
     }
-
+    /* hyperlinks */
     a {
       text-decoration: none;
       font-size: 1em;
@@ -35,20 +36,20 @@
       color: #333;
       margin-bottom: 10px;
     }
-
+  /* form container */
     form {
       width: 100%;
       max-width: 500px;
       margin-bottom: 20px;
     }
-
+/* form labels */
     label {
       font-weight: 500;
       color: #555;
       display: block;
       margin-bottom: 5px;
     }
-
+/* form inputs and buttons */
     input, button {
       width: 100%;
       padding: 10px;
@@ -120,7 +121,7 @@
 
   TaskDAO taskDAO = new TaskDAO();
   String action = request.getParameter("action");
-
+<!-- handle task actions like add, delete, or update -->
   if (action != null) {
     try {
       switch (action) {
