@@ -11,7 +11,7 @@ public class CollegeDAO {
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "MyS3cure#2024";
 
-    // Add a new college
+    //add new college to database for specified user
     public void addCollege(String name, String location, int yearFounded, float averageGPA, int userID) {
         String sql = "INSERT INTO Colleges (name, location, yearFounded, averageGPA, userID) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
@@ -23,11 +23,12 @@ public class CollegeDAO {
             statement.setInt(5, userID);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //logs type of exception in case of error
         }
     }
 
-    // Get all colleges for a specific user
+    //retrieve colleges for a specific user ID
+    //users will only be able to see their own colleges
     public List<Colleges> getCollegesByUserID(int userID) {
         List<Colleges> collegesList = new ArrayList<>();
         String sql = "SELECT * FROM Colleges WHERE userID = ?";
@@ -51,7 +52,7 @@ public class CollegeDAO {
         return collegesList;
     }
 
-    // Delete a college
+    //delete from database
     public void deleteCollege(int collegeID, int userID) {
         String sql = "DELETE FROM Colleges WHERE collegeID = ? AND userID = ?";
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
@@ -64,7 +65,7 @@ public class CollegeDAO {
         }
     }
 
-    // Update a college
+    //edit a college with new values to replace old ones
     public void updateCollege(int collegeID, String name, String location, int yearFounded, float averageGPA, int userID) {
         String sql = "UPDATE Colleges SET name = ?, location = ?, yearFounded = ?, averageGPA = ? WHERE collegeID = ? AND userID = ?";
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
@@ -81,13 +82,14 @@ public class CollegeDAO {
         }
     }
 
-    // Search colleges by name for a specific user
+    //search functionality - search by college name
     public List<Colleges> searchCollegesByName(String name, int userID) {
         List<Colleges> collegesList = new ArrayList<>();
         String sql = "SELECT * FROM Colleges WHERE name LIKE ? AND userID = ?";
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, "%" + name + "%");
+            //sets the user id to filter results for the specific user
             statement.setInt(2, userID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -99,10 +101,11 @@ public class CollegeDAO {
                         resultSet.getFloat("averageGPA")
                 );
                 collegesList.add(college);
+                //all matching colleges stored to arraylist (can be multiple matching colleges)
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return collegesList;
+        return collegesList; //return full list of matching colleges
     }
 }
