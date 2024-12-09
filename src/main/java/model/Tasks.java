@@ -7,14 +7,15 @@ public class Tasks {
     private String taskName;
     private Date dueDate;
 
-    // Constructor
+    //constructor to initialize all vals
     public Tasks(int taskID, String taskName, Date dueDate) {
         this.taskID = taskID;
         this.taskName = taskName;
         this.dueDate = dueDate;
     }
 
-    // Getters and Setters
+    //getters and setters for ID, name, submission status, due date
+
     public int getTaskID() {
         return taskID;
     }
