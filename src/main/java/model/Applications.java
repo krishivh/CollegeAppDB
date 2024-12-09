@@ -1,6 +1,6 @@
 package model;
 
-
+//class to initialize values and store getter and setter methods
 public class Applications {
 
     private int applicationID;
@@ -9,7 +9,7 @@ public class Applications {
     private String applicationDeadline;
     private String applicationType;
 
-    // Getters and Setters
+    //getters and setters for ID, name, submission status, deadline & type
     public int getApplicationID() {
         return applicationID;
     }
