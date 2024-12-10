@@ -9,7 +9,6 @@ public class UserDAO {
         int result = 0;
         String INSERT_USER_SQL = "INSERT INTO user (firstName, lastName, email, phone, password, highSchool, GPA) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        // Load MySQL JDBC Driver
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         try (Connection connection = DriverManager.getConnection(
@@ -36,8 +35,8 @@ public class UserDAO {
     public User loginUser(String email, String password) throws ClassNotFoundException {
         User user = null;
         String LOGIN_USER_SQL = "SELECT * FROM user WHERE email = ? AND password = ?";
-
-        // Load MySQL JDBC Driver
+//access registered user from database for login
+        
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         try (Connection connection = DriverManager.getConnection(
@@ -49,7 +48,7 @@ public class UserDAO {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    // Create a User object with the retrieved data
+                    //create user profile and details (this is also what they will see when registering)
                     user = new User(
                             resultSet.getInt("userID"),
                             resultSet.getString("firstName"),
@@ -66,7 +65,7 @@ public class UserDAO {
         } catch (SQLException e) {
             printSQLException(e);
         }
-        return user;  // Return the User object (can be null if no match)
+        return user;  //return the User object (can be null if no match)
     }
 
     private void printSQLException(SQLException ex) {
