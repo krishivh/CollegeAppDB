@@ -4,14 +4,16 @@ Users will be able to create an account, log in securely, manage individual coll
 
 Project Dependencies:
 - Creating a Maven project with archetype webapp
-    -used to initialize a new Maven Web Application project
-    -creates a pom.xml where project dependencies are defined
+    - Used to initialize a new Maven Web Application project
+    - Creates a pom.xml where project dependencies are defined
 - Utilized mysql-connector-j-8.0.33.jar
-    -allows communication with MySQL database to manage data storage and retrieval of information
+    - Allows communication with MySQL database to manage data storage and retrieval of information
+    - Found this version from the internet
 - javax.servlet package
-    -provides interface to create servlets
-    -helps generate dynamic web content
+    - Provides interface to create servlets
+    - Helps generate dynamic web content
 - Utilized Smart Tomcat (Apache Tomcat/9.0.97)
-    -allows us to run and test web application locally using tomcat server
+    - Allows us to run and test web application locally using tomcat server
+    - Added to project from IntelliJ Marketplace
 - JDK 23
-    -allows us to run with most recent and latest hava features
+    - Allows us to run with most recent and latest Java features
