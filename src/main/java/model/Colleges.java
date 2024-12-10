@@ -7,7 +7,7 @@ public class Colleges {
     private float yearFounded;
     private float averageGPA;
 
-    // Constructor
+    //constructor to initialize all vals
     public Colleges(int collegeID, String name, String location, int yearFounded, float averageGPA) {
         this.collegeID = collegeID;
         this.name = name;
@@ -20,7 +20,7 @@ public class Colleges {
 
     }
 
-    // Getters and Setters
+    //getters and setters for ID, college name, location, year founded & gpa
     public int getCollegeID() {
         return collegeID;
     }
