@@ -13,7 +13,9 @@ public class ApplicationDAO {
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "MyS3cure#2024";
 
-    // Fetch colleges associated with a user
+   // Fetches a list of colleges associated with a specific user ID
+    // Input - userID - The ID of the user whose colleges are being fetched
+    // Output - List of Colleges objects representing the user's colleges
     public List<Colleges> getCollegesByUserID(int userID) {
         List<Colleges> collegesList = new ArrayList<>();
         String query = "SELECT name FROM Colleges WHERE userID = ?";
@@ -38,7 +40,12 @@ public class ApplicationDAO {
         return collegesList;
     }
 
-    // Add a new application
+    // Adds a new application record to the database for a user
+    // Input: collegeName - Name of the college the application is for
+    //        submissionStatus - Current status of the application (e.g., Submitted)
+    //        applicationDeadline - Deadline for the application
+    //        applicationType - Type of application (e.g., Early Decision)
+    //        userID - ID of the user adding the application
     public void addApplication(String collegeName, String submissionStatus, String applicationDeadline, String applicationType, int userID) {
         String query = "INSERT INTO Applications (collegeName, submissionStatus, applicationDeadline, applicationType, userID) VALUES (?, ?, ?, ?, ?)";
 
@@ -65,7 +72,7 @@ public class ApplicationDAO {
     }
 
 
-    // Update an existing application
+    // Update an existing application with same parameters
     public void updateApplication(int applicationID, String collegeName, String submissionStatus, String applicationDeadline, String applicationType, int userID) {
         String query = "UPDATE Applications SET collegeName = ?, submissionStatus = ?, applicationDeadline = ?, applicationType = ? " +
                 "WHERE applicationID = ? AND userID = ?";
@@ -80,6 +87,7 @@ public class ApplicationDAO {
             pstmt.setInt(5, applicationID);
             pstmt.setInt(6, userID);
 
+            // See if record was updated successfully
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Application updated successfully!");
@@ -92,7 +100,9 @@ public class ApplicationDAO {
         }
     }
 
-    // Delete an application
+    // Deletes an application record from the database
+    // Input: applicationID - ID of the application to delete
+    //        userID - ID of the user deleting the application
     public void deleteApplication(int applicationID, int userID) {
         String query = "DELETE FROM Applications WHERE applicationID = ? AND userID = ?";
 
@@ -115,8 +125,9 @@ public class ApplicationDAO {
         }
     }
 
-
-    // Fetch applications associated with a user
+    // Fetches a list of application records for a specific user from the database
+    // Input: userID - The ID of the user whose applications are being fetched
+    // Output: List of Applications objects representing the user's applications
     public List<Applications> getApplicationsByUserID(int userID) {
         List<Applications> applicationsList = new ArrayList<>();
         String query = "SELECT applicationID, collegeName, submissionStatus, applicationDeadline, applicationType " +
@@ -129,6 +140,7 @@ public class ApplicationDAO {
             pstmt.setInt(1, userID);
 
             try (ResultSet rs = pstmt.executeQuery()) {
+                // Use getters and setters to retrieve and set parameters
                 while (rs.next()) {
                     Applications application = new Applications();
                     application.setApplicationID(rs.getInt("applicationID"));
