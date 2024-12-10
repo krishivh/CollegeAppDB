@@ -91,18 +91,18 @@
     </style>
 </head>
 <body>
-    <!-- container for the login form and related elements -->
-    <div class="login-container">
-        <!-- page heading -->
-        <h2>Login</h2>
-        <!-- login form with email and password fields -->
-        <form action="login" method="post">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <input type="submit" value="Login">
-        </form>
+<div class="login-container">
+    <br>
+    <h1>Welcome to CollegeConnect!</h1>
+    <br>
+    <h2>Login</h2>
+    <form action="login" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <input type="submit" value="Login">
+    </form>
 
         <!-- error message displayed if login fails -->
         <c:if test="${not empty errorMessage}">
