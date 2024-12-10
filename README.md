@@ -17,3 +17,21 @@ Project Dependencies:
     - Added to project from IntelliJ Marketplace
 - JDK 23
     - Allows us to run with most recent and latest Java features
+
+
+Terminal Commands to Create Database
+- Install MySQL on Mac using Homebrew by running brew install mysql in the terminal.
+- Start the MySQL service with the command brew services start mysql.
+- Secure the MySQL installation by running sudo mysql_secure_installation. During this process, set a root password. In this case, use the password MyS3cure#2024.
+- Log in to MySQL as the root user using the command mysql -u root -p. Enter the root password (MyS3cure#2024) when prompted.
+- Verify the connection to the correct port by running mysql -u root -p -P 3306 -h 127.0.0.1. Enter the root password again.
+
+
+MySQL Workbench Setup
+- Open MySQL Workbench.
+- Create a new connection.
+- Name the connection college.
+- Use root as the username.
+- Enter the password you set earlier (MyS3cure#2024).
+- Test the connection to ensure everything is set up correctly.
+- Once the connection is successful, you are ready to create and manage your database in MySQL Workbench.
