@@ -12,7 +12,7 @@ public class User {
 
     public User() {}
 
-    // Constructor to initialize all fields
+    //constructor to initialize all fields
     public User(int userID, String firstName, String lastName, String email, String password, String phone, String highSchool, float gpa) {
         this.userID = userID;
         this.firstName = firstName;
@@ -24,7 +24,7 @@ public class User {
         this.gpa = gpa;
     }
 
-    // Getters and Setters
+    //getters and setters for ID, first name, last name, high school, gpa, password
     public int getUserID() {
         return userID;
     }
