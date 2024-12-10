@@ -32,7 +32,7 @@
 
     label {
       display: block;
-      margin: 10px 0 5px;
+      margin: 10px 0 5px; /* spacing for labels */
       text-align: left;
       font-size: 0.9em;
       color: #555;
@@ -84,7 +84,7 @@
 <body>
 <div class="register-container">
   <h2>Create an Account</h2>
-  <%-- Display error message if validation fails --%>
+  <%-- display error message if validation fails --%>
   <c:if test="${not empty errorMessage}">
     <p class="error-message">${errorMessage}</p>
   </c:if>
