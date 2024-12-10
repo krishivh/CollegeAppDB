@@ -32,9 +32,10 @@ public class RegisterServlet extends HttpServlet {
             logger.info("Entering doPost method.");
             User user = new User();
 
-            // Get and validate the password
+            //getter to retrieve password
             String password = request.getParameter("password");
 
+            //validate if password works with requirements for security
             if (!isValidPassword(password)) {
                 logger.warning("Password validation failed.");
                 request.setAttribute("errorMessage", "Password must be at least 7 characters long, contain one uppercase letter, one number, and one special character.");
@@ -43,7 +44,7 @@ public class RegisterServlet extends HttpServlet {
                 return;
             }
 
-            // Populate the user object
+            //populate the user object
             user.setFirstName(request.getParameter("firstName"));
             user.setLastName(request.getParameter("lastName"));
             user.setEmail(request.getParameter("email"));
@@ -76,13 +77,9 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Validates the password to ensure it meets the required criteria.
-     * @param password The password to validate.
-     * @return true if the password is valid, false otherwise.
-     */
+    //criteria for password: one uppercase, at least 7 characters, one special character
+    //validates if criteria is met
     private boolean isValidPassword(String password) {
-        // Regular expression to enforce password rules
         String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{7,}$";
         return password != null && password.matches(passwordPattern);
     }
