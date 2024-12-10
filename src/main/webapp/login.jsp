@@ -3,6 +3,7 @@
 <head>
     <title>Login</title>
     <style>
+        /* overall page styling */
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
@@ -13,6 +14,7 @@
             margin: 0;
         }
 
+        /* container styling for the login form */
         .login-container {
             background-color: #ffffff;
             padding: 20px;
@@ -22,12 +24,14 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
+        /* page heading */
         h2 {
             margin-bottom: 15px;
             font-size: 1.5em;
             color: #333;
         }
 
+        /* form labels */
         label {
             display: block;
             margin: 10px 0 5px;
@@ -36,6 +40,7 @@
             color: #555;
         }
 
+        /* input fields */
         input[type="email"],
         input[type="password"] {
             width: 100%;
@@ -46,6 +51,7 @@
             font-size: 1em;
         }
 
+        /* the submit button */
         input[type="submit"] {
             width: 100%;
             padding: 10px;
@@ -57,10 +63,12 @@
             border-radius: 4px;
         }
 
+        /* hover effect for the submit button */
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
 
+        /* registration link */
         .register-link {
             display: block;
             margin-top: 10px;
@@ -69,10 +77,12 @@
             text-decoration: none;
         }
 
+        /* hover effect for the registration link */
         .register-link:hover {
             color: #0056b3;
         }
 
+        /* error messages */
         .error-message {
             color: red;
             font-size: 0.9em;
@@ -81,23 +91,26 @@
     </style>
 </head>
 <body>
-<div class="login-container">
-    <h2>Login</h2>
-    <form action="login" method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <input type="submit" value="Login">
-    </form>
+    <!-- container for the login form and related elements -->
+    <div class="login-container">
+        <!-- page heading -->
+        <h2>Login</h2>
+        <!-- login form with email and password fields -->
+        <form action="login" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <input type="submit" value="Login">
+        </form>
 
-    <%-- Display error message if login failed --%>
-    <c:if test="${not empty errorMessage}">
-        <p class="error-message">${errorMessage}</p>
-    </c:if>
+        <!-- error message displayed if login fails -->
+        <c:if test="${not empty errorMessage}">
+            <p class="error-message">${errorMessage}</p>
+        </c:if>
 
-    <%-- Link to registration page --%>
-    <a href="register.jsp" class="register-link">Create an Account</a>
-</div>
+        <!-- link to the registration page -->
+        <a href="register.jsp" class="register-link">Create an Account</a>
+    </div>
 </body>
 </html>
