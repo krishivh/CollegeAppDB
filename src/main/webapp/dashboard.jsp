@@ -5,6 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
+        /*setting base styles for the body*/
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f4f4f9;
@@ -16,18 +17,20 @@
             justify-content: center;
             height: 100vh;
         }
-
+       /*styling the heading*/
         h1 {
             color: #333;
             font-size: 2.5em;
             margin-bottom: 20px;
         }
 
+        /*styling links globally*/
         a {
             text-decoration: none;
             font-size: 16px;
         }
 
+        /*back button link*/
         .back-link {
             position: absolute;
             top: 20px;
@@ -41,16 +44,17 @@
         .back-link i {
             margin-right: 5px;
         }
-
+        /*unordered list*/
         ul {
             list-style: none;
             padding: 0;
         }
-
+        /*indiv list items*/
         ul li {
             margin: 15px 0;
         }
 
+        /*links within list*/
         ul li a {
             display: flex;
             align-items: center;
@@ -69,6 +73,7 @@
             color: #0056b3;
         }
 
+        /*adding spacing for icons within links*/
         ul li a i {
             margin-right: 10px;
         }
